@@ -21,10 +21,12 @@ public class TestLatch {
 	private static class SingleWithLatch extends Thread {
 		private int id;
 		private CountDownLatch startGate;
+		private CountDownLatch closeGate;
 		
-		public SingleWithLatch(int id, CountDownLatch startGate) {
+		public SingleWithLatch(int id, CountDownLatch startGate, CountDownLatch closeGate) {
 			this.id = id;
 			this.startGate = startGate;
+			this.closeGate = closeGate;
 		}
 		
 		public void run() {
@@ -34,6 +36,7 @@ public class TestLatch {
 //					System.out.println("NO-" + id + " : " + i + "haha!" );
 //				}
 				System.out.println("NO-" + id + " : haha!" );
+				closeGate.countDown();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -45,15 +48,23 @@ public class TestLatch {
 			Single s = new Single(i);
 			s.start();
 		}
+		System.out.println("finished!");
 	}
 	
 	public void startThreadsWithLatch() {
 		final CountDownLatch startGate = new CountDownLatch(1);
+		final CountDownLatch closeGate = new CountDownLatch(20);
 		for(int i=0; i<20; i++) {
-			SingleWithLatch s = new SingleWithLatch(i, startGate);
+			SingleWithLatch s = new SingleWithLatch(i, startGate, closeGate);
 			s.start();
 		}
 		startGate.countDown();
+		try {
+			closeGate.await();
+			System.out.println("finished!");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void main(String[] args) {
