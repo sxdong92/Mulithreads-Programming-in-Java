@@ -17,7 +17,6 @@ public class TestFutureTask {
 		}
 		executor.shutdown();
 	}
-		
 }
 
 class MyFutureTask extends FutureTask<String> {
@@ -34,8 +33,6 @@ class MyFutureTask extends FutureTask<String> {
 			e.printStackTrace();
 		}
 	}
-	
-	
 }
 
 class Task implements Callable<String> {
