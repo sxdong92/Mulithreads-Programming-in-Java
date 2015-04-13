@@ -49,6 +49,6 @@ public class RunnableCallableAndFutureTask {
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
-		
+		Executors.newSingleThreadExecutor().shutdown();
 	}
 }
