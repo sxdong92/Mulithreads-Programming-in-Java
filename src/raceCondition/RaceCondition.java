@@ -25,11 +25,17 @@ public class RaceCondition {
 	 * 当然，如果obj通过某些方法被传给了别的线程，那它就不再是线程安全的了。 
 	 */
 	public void someMethod2() {
-		RaceCondition obj = new RaceCondition(); //线程安全，因为obj不会逸出
+		RaceCondition obj = new RaceCondition(); //ThreadSafe，因为obj不会逸出
 		someMethod3(obj);
 	}
 	
 	public void someMethod3(RaceCondition obj) {
 		obj.someMethod();
+	}
+	
+	StringBuilder builder = new StringBuilder(); //NotThreadSafe
+	
+	public void notSafeAdd(String text) {
+		builder.append(text);
 	}
 }
