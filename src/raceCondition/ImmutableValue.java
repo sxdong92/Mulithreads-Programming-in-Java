@@ -27,6 +27,7 @@ public class ImmutableValue {
  * 重要的是要记住，即使一个对象是线程安全的不可变对象，指向这个对象的引用也可能不是线程安全的。
  *
  * Calculator类持有一个指向ImmutableValue实例的引用。注意，通过setValue()方法和add()方法可能会改变这个引用。
+ * 要使Calculator类实现线程安全，将getValue()、setValue()和add()方法都声明为同步方法即可。
  */
 class Calculator {
 	private ImmutableValue currentValue = null;
