@@ -31,6 +31,7 @@ public class FairLock {
 		
 		while(isLockedForThisThread) {
 			synchronized(this) {
+				// 如果没有其他线程占用FairLock且队列中只有当前线程, 那么不必wait。 (即跳入下面if中)
 				isLockedForThisThread = isLocked || waitingThreads.get(0) != queueObject;
 				if(!isLockedForThisThread) {
 					isLocked = true;
