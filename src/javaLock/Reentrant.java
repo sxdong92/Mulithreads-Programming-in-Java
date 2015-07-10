@@ -64,3 +64,32 @@ class ReentrantLock {
 		}
 	}
 }
+
+/**
+ * 如果用Lock来保护临界区，并且临界区有可能会抛出异常，那么在finally语句中调用unlock()就显得非常重要了。这样可以保证这个锁对象可以被解锁以便其它线程能继续对其加锁。
+ * 
+ * 这个简单的结构可以保证当临界区抛出异常时Lock对象可以被解锁。
+ * 如果不是在finally语句中调用的unlock()，当临界区抛出异常时，Lock对象将永远停留在被锁住的状态，这会导致其它所有在该Lock对象上调用lock()的线程一直阻塞。 
+ */
+class Reentrant3 {
+	Lock lock = new Lock();
+	
+	public void outer() throws InterruptedException {
+		lock.lock();
+		try {
+			inner();
+		} finally {
+			lock.unlock();
+		}
+	}
+	
+	public synchronized void inner() throws InterruptedException {
+		lock.lock();
+		try {
+			//do something ...
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+}
